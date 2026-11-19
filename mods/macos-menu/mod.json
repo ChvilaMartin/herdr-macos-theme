@@ -1,0 +1,12 @@
+{
+  "place": "none",
+  "cloned_from": {
+    "name": "menu",
+    "version": "0.1.16"
+  },
+  "overlay": {
+    "width": 236,
+    "height": 300,
+    "frame": "none"
+  }
+}

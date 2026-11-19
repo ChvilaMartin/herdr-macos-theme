@@ -1,0 +1,12 @@
+{
+  "place": "none",
+  "title": "Appearance",
+  "overlay": {
+    "kind": "dialog",
+    "width": 580
+  },
+  "cloned_from": {
+    "name": "herdr-glass-bg",
+    "version": "0.1.16"
+  }
+}

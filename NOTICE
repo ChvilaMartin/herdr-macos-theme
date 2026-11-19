@@ -1,0 +1,18 @@
+macOS, a layout for the Herdr app
+Copyright (c) 2026 ChvilaMartin
+
+This layout's own changes are under the MIT License (LICENSE).
+
+It is derived from Herdr Glass (https://github.com/noah4520/herdr-glass),
+Copyright (c) 2026 Noah Chen, MIT License (licenses/Herdr-Glass-MIT.txt):
+the layout, every mod except macos-menu and macos-new-menu, and the background
+pictures in mods/macos-appearance/presets/.
+
+Herdr Glass, and macos-menu (from `menu`) and macos-new-menu (from `new-menu`), are
+in turn derived from the Herdr app (https://github.com/herdrdev/herdr-app, defaults/,
+version 0.1.16), licensed under the Apache License 2.0 (licenses/Herdr-Apache-2.0.txt).
+Changes made here are marked with `macos:` comments in each mod's main.js; Herdr
+Glass's own changes are marked `glass:`.
+
+The icons in mods/macos-chrome, mods/macos-tabs and mods/macos-pane are from Lucide
+(https://lucide.dev), ISC License (licenses/Lucide-ISC.txt).
