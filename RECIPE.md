@@ -17,9 +17,11 @@ through, blurred, under a light grey tint.
   - Top row (46px): Herdr logo and name, search, sidebar fold button. macOS traffic
     lights at `[24, 26]`.
   - **Spaces** heading: 11px semibold, `dim`. Under it, one header per machine
-    ("This computer", then each ssh machine): 30px tall with 6px above it, the name
-    12.5px semibold in `foreground`; its icon, state, `+`, status dot and chevron stay
-    11px `dim`. Space rows (26–28px, radius 8) below each machine.
+    ("This computer", then each ssh machine): 32px tall with 6px above it, the name
+    14px semibold in `muted`; a 16px monitor/server icon, the `+` (new space there)
+    18px in a 22px hit area with radius 6 that hovers `hover`, a 7px status dot and a
+    14px chevron, all `dim`; state text stays 11px. Space rows (26–28px, radius 8)
+    below each machine.
   - **Agents** heading: 11px semibold, `dim`; agents grouped by space, 30px rows,
     radius 8; sub-agents indented on 26px rows.
   - Footer (97px): Settings, Appearance, Add machine. No divider lines anywhere in the
@@ -97,7 +99,8 @@ through, blurred, under a light grey tint.
     `frame: "none"` and 16px more width and height for the shadow margin.
   - `macos-spaces`, `macos-agents`: blue selected rows via `onBlue(t)`, a copy of the
     theme with white text colors passed to the selected row; semibold 11px headings;
-    machine headers 12.5px semibold `foreground`; no divider line above Agents.
+    machine headers 14px semibold `muted` with larger icon, `+` and chevron; no
+    divider line above Agents.
   - `macos-chrome`: no divider line above the footer; opens `macos-appearance`.
   - `macos-appearance`: white glass tints, the Desktop choice, cards limited to
     `panel`.
