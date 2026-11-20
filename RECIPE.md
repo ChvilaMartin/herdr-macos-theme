@@ -21,7 +21,11 @@ through, blurred, under a light grey tint.
     14px semibold in `muted`; a 16px monitor/server icon, the `+` (new space there)
     18px in a 22px hit area with radius 6 that hovers `hover`, a 7px status dot and a
     14px chevron, all `dim`; state text stays 11px. Space rows (26–28px, radius 8)
-    below each machine.
+    below each machine, each with a 12px fold arrow on the left.
+  - **Tabs under each space**: one 26px row per tab (radius 8, 12.5px text), indented
+    past the space's name: the focused pane's program icon (14px), Herdr's tab name
+    (`Z` when zoomed) and the tab's status mark (working spinner, blocked or done dot).
+    A split tab is still one row; panes are not listed.
   - **Agents** heading: 11px semibold, `dim`; agents grouped by space, 30px rows,
     radius 8; sub-agents indented on 26px rows.
   - Footer (97px): Settings, Appearance, Add machine. No divider lines anywhere in the
@@ -62,6 +66,11 @@ through, blurred, under a light grey tint.
   shared highlight (accent blue, white text, icon and shortcut); leaving a row clears
   it; Enter picks the highlighted row; Esc or a click outside closes the menu.
 - **Fold**: the sidebar button folds to the rail and back, as in Herdr Glass.
+- **Tab list**: spaces start expanded; a space's arrow folds its tabs away, and folded
+  spaces are remembered (`localStorage` `tree.folded`). Clicking a tab row shows that
+  space and tab; right-clicking it opens the tab menu. One row is blue: the shown tab,
+  or the shown space while it is folded; an expanded shown space keeps a grey
+  `selected` pill. The rail (under 160px) shows no tabs.
 - **Appearance** (sidebar footer): Herdr Glass's dialog, adapted.
   - Glass: Clear / Light / Medium / Tinted / Solid sets the right panel's alpha
     (`40`/`66`/`99`/`c2`/`eb` on `#ffffff`) and the panes' (`bf`/`d9`/`e6`/`f0`/`fa`
@@ -101,6 +110,7 @@ through, blurred, under a light grey tint.
     theme with white text colors passed to the selected row; semibold 11px headings;
     machine headers 14px semibold `muted` with larger icon, `+` and chevron; no
     divider line above Agents.
+  - `macos-spaces`: the tabs listed under each space, with fold arrows.
   - `macos-chrome`: no divider line above the footer; opens `macos-appearance`.
   - `macos-appearance`: white glass tints, the Desktop choice, cards limited to
     `panel`.
@@ -143,4 +153,6 @@ through, blurred, under a light grey tint.
 - The shown space and the focused agent are blue rows with white text, including the
   branch and ↑/↓ counts.
 - Machine names read as small headers above their spaces.
+- Each space lists its tabs; the shown tab is blue; folding a space hides its tabs and
+  survives a restart.
 - Appearance offers Desktop first; picking Desktop removes the picture.

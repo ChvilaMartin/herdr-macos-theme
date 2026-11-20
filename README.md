@@ -31,7 +31,8 @@ delete `layouts/macos.*`, `themes/macos.json` and `mods/macos-*` from
   The sidebar, tab bar and status bar sit on it without boxes; terminals are white
   rounded cards with a blue focus ring.
 - **Sidebar**: no dividers, semibold section headings, machine names as small headers,
-  and the shown space / focused agent as a blue row with white text.
+  each space's tabs listed under it (foldable), and the shown tab / focused agent as a
+  blue row with white text.
 - **Menus**: right-click (terminal, tab, space), `+` and the agents sort menu: rounded
   panels, a blue highlight shared by pointer and arrow keys, shortcuts as `⇧⌘D`.
 - **Colors**: Apple's light system palette (`#007aff` accent, label greys), readable

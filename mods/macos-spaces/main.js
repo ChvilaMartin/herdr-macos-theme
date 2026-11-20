@@ -5,7 +5,7 @@
 // its first terminal is in now, only where unusual: branch, ahead/behind. Agent state lives in the agents list, not here. Click to
 // switch, right-click for its menu, drag to reorder.
 
-import { View, div, svg } from "gpui-kit";
+import { View, div, svg, image } from "gpui-kit";
 import { v_flex, h_flex, ScrollHandle } from "gpui-base";
 import { spaces, machines, panes, run, openOverlay, exec, hc, theme, shared, setShared, watchFolder, window, layout } from "herdr";
 
@@ -25,6 +25,21 @@ function find(node, id) {
 
 // The sidebar's rail goes by its width, not a flag: dragging its edge narrows it too.
 const narrow = () => (find(layout(), "sidebar")?.size?.px ?? Infinity) < 160;
+
+// macos: the tree under each space. A program's icon (tinted glyph or picture), the
+// disclosure arrow, and a status mark like the agents list's (white on a blue row).
+function programIcon(p, size, color) {
+  if (!p?.icon) return div().w(size).h(size).flex_none();
+  return p.tint ? svg(p.icon).size(size).flex_none().text_color(color) : image(p.icon).w(size).h(size).flex_none();
+}
+const ARROW = 12;
+const arrow = (open, t) => svg(`mods/workspace-chrome/chevron-${open ? "down" : "right"}.svg`).size(ARROW).flex_none().text_color(t.dim);
+function statusMark(status, t) {
+  if (status === "working") return svg("mods/workspace-chrome/spinner.svg").size(12).flex_none().text_color(t.working).spin(900);
+  if (status === "blocked") return div().size(7).mx(2).flex_none().rounded(4).bg(t.blocked);
+  if (status === "done") return div().size(7).mx(2).flex_none().rounded(4).bg(t.done);
+  return null;
+}
 
 // Where a space is now: its first terminal's live folder, else where it was made.
 // `ps`: panes(), read once by the caller (each read copies every pane).
@@ -94,6 +109,8 @@ export default class Spaces extends View {
       for (const state of Object.values(this.reconnecting)) state.busy = false;
     } catch { this.reconnecting = {}; }
     try { this.folded = new Set(JSON.parse(localStorage.getItem("machines.folded") ?? "[]")); } catch { this.folded = new Set(); }
+    // macos: folded spaces and tabs (ids); absent means expanded.
+    try { this.treeFolded = new Set(JSON.parse(localStorage.getItem("tree.folded") ?? "[]")); } catch { this.treeFolded = new Set(); }
     this.refreshMachines(cx);
     cx.timer.every(15000, cx => this.refreshMachines(cx));
     // Refresh only when the refs could have changed (see `due`).
@@ -345,7 +362,8 @@ export default class Spaces extends View {
   // The rows, under a header per machine once one isn't this computer.
   grouped(t, collapsed) {
     const rows = this.ordered();
-    const draw = (r) => (collapsed ? this.compact(r, t) : this.row(r, t));
+    this.ps = panes();
+    const draw = (r) => (collapsed ? this.compact(r, t) : this.block(r, t));
     // Where the active space's row lands among the children this returns: the list scrolls by its direct
     // children, and machine headers, login notes and loading rows count too.
     this.activeAt = -1;
@@ -450,8 +468,45 @@ export default class Spaces extends View {
       .when(g.behind > 0, (el) => el.child(div().flex_none().text_color(t.ansi1).child(`\u2193${g.behind}`)));
   }
 
+  // macos: folding a space in the tree.
+  toggle(id, cx) {
+    this.treeFolded.has(id) ? this.treeFolded.delete(id) : this.treeFolded.add(id);
+    // Forget ids that are gone, so the stored set doesn't grow forever.
+    const live = new Set(spaces().map(s => s.id));
+    for (const x of [...this.treeFolded]) if (!live.has(x)) this.treeFolded.delete(x);
+    localStorage.setItem("tree.folded", JSON.stringify([...this.treeFolded]));
+    cx.notify();
+  }
+
+  // A space with its tabs under it, expanded unless folded.
+  block(r, t) {
+    const w = r.w, open = !this.treeFolded.has(w.id);
+    return v_flex().flex_none().child(this.row(r, t))
+      .when(open, el => el.children(w.tabs.flatMap(c => this.tabRows(w, c, r.tree, t))));
+  }
+
+  tabRows(w, c, tree, t0) {
+    // The tab's focused pane gives its icon; a split tab is still one row.
+    const mine = this.ps.filter(p => p.tab === c.id);
+    const lead = mine.find(p => p.focused) ?? mine[0];
+    const on = w.active && c.active; // the shown tab is the blue row
+    const t = on ? onBlue(t0) : t0;
+    const indent = 8 + (tree ? 44 : 0) + ARROW + 9 + ARROW + 7;
+    return [h_flex().id(`tree-tab-${c.id}`).h(26).flex_none().pl(indent).pr(8).gap(7).items_center().rounded(8).text_size(12.5)
+      .when(on, el => el.bg(t.accent))
+      .when(!on, el => el.hover(s => s.bg(t.hover)))
+      .on_click(() => { if (!w.active) run("space.select", { id: w.id }); run("tab.select", { id: c.id }); })
+      .on_mouse_down("right", (_e, cx) => { cx.stop_propagation(); openOverlay({ mod: "macos-menu", kind: "popup", frame: "none", width: 216, props: { tab: "tab", target: { id: c.id, space: w.id } } }); })
+      .child(programIcon(lead?.program, 14, t.muted))
+      .child(div().flex_1().min_w(0).truncate().text_color(on ? t.foreground : t.muted).child(c.zoomed ? `${c.name} Z` : c.name))
+      .when(Boolean(statusMark(c.status, t)), el => el.child(statusMark(c.status, t)))];
+  }
+
   row({ w, i, g, tree }, t0) {
-    const on = w.active;
+    // macos: blue while folded (the space is the selection); expanded, its tab
+    // carries the blue and the space keeps the grey pill.
+    const open = !this.treeFolded.has(w.id);
+    const on = w.active && !open;
     const t = on ? onBlue(t0) : t0;
     const fromIndex = this.pressed === null ? -1 : spaces().findIndex(s => s.id === this.pressed);
     const colors = shared("space.colors") ?? {};
@@ -466,7 +521,8 @@ export default class Spaces extends View {
       .justify_center()
       .rounded(8)
       .when(on, (el) => el.bg(t.accent))
-      .when(!on, (el) => el.hover((s) => s.bg(t.hover)))
+      .when(w.active && !on, (el) => el.bg(t.selected))
+      .when(!w.active, (el) => el.hover((s) => s.bg(t.hover)))
       .when(this.pressed === w.id && this.over !== w.id, (el) => el.opacity(0.5))
       .when(this.pressed !== null && this.over === w.id && this.pressed !== w.id, (el) => el.child(
         div().absolute().left(0).right(0).h(2).bg(t.accent)
@@ -501,6 +557,10 @@ export default class Spaces extends View {
         h_flex()
           .gap(9)
           .items_center()
+          .child(div().id(`tree-fold-${w.id}`).flex_none()
+            .on_mouse_down("left", (_e, cx) => cx.stop_propagation())
+            .on_click((_e, cx) => { cx.stop_propagation(); this.toggle(w.id, cx); })
+            .child(arrow(open, t)))
           .when(Boolean(tree), el => el.pl(22).child(svg("mods/workspace-chrome/branch.svg").size(13).flex_none().text_color(t.dim)))
           // glass: no letter avatar in front of a space, just its name.
           .child(div().flex_initial().min_w(SIDE_MIN).truncate().text_color(t.foreground).child(w.name))
