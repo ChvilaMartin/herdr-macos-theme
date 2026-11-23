@@ -4,7 +4,7 @@ A light, native-looking macOS window for Herdr. The whole window is one frosted 
 glass over the blurred desktop: the sidebar, tab bar and status bar sit directly on it
 with no boxes of their own, and the terminals are soft white cards. Selections and menu
 highlights are macOS system blue with white text, menus are rounded like Tahoe's, and
-type is San Francisco and SF Mono. Built from Herdr Glass 0.1.0 on herdr-app 0.1.16.
+type is San Francisco, terminals Operator Mono Italic. Built from Herdr Glass 0.1.0 on herdr-app 0.1.16.
 
 ## What you see
 
@@ -40,7 +40,8 @@ through, blurred, under a light grey tint.
     then `+`, Files and Changes buttons.
   - Terminal panes: radius 16, fill solid white `#ffffff`, border `#ffffff80`, a blue focus ring
     `#007aff8c` on the focused pane, a 30px header on every pane (`lone: true`),
-    terminal text `[12, 14]` in. Terminal: SF Mono 13, weight 400, line height 1.1,
+    terminal text `[12, 14]` in. Terminal: `Operator Mono Italic Face` 14, weight 600 (Operator Mono's Bold
+    Italic face), line height 1.1,
     `terminal_opacity: 0` (the rounded frame paints the white).
   - Right panel (340px, min 280, max 900, hidden until Files or Changes is pressed):
     the only floating card, `#ffffff73`, border `#ffffff8c`, radius 16, shadow `sm`.
@@ -50,7 +51,7 @@ through, blurred, under a light grey tint.
   `#f6f6f8e6`, 1px `border`, shadow `md`, 8px transparent margin for the shadow, 5px
   inner padding. Rows 26px, radius 8, 13px text. Shortcuts in Apple notation
   (`⇧⌘D`, `⌘N`, `↩`).
-- **Type**: UI in `.SF NS` (San Francisco); terminals in SF Mono.
+- **Type**: UI in `.SF NS` (San Francisco); terminals in Operator Mono Italic (see Watch out).
 - **Colors** (`themes/macos.json`, Apple's light system colors): foreground `#1d1d1f`,
   muted `#3c3c43a6`, dim `#3c3c4373`, border `#0000001a`, selected `#0000001a`,
   accent / solid `#007aff` with white, selection `#b3d7ff`, working `#007aff`,
@@ -126,6 +127,13 @@ through, blurred, under a light grey tint.
   the screen.
 - A low window alpha (below ~`a6`) over a dark wallpaper makes the whole light theme
   murky: macOS's own materials keep a strong light tint.
+- Herdr has no italic switch for terminals, only family and weight. The italic is a
+  renamed copy of Operator Mono's italic faces, family `Operator Mono Italic Face`,
+  made by `scripts/operator-mono-italic.py` into `~/.config/herdr-app/fonts/`.
+  Operator Mono is a paid font, so the repo doesn't carry it; without it the
+  terminals fall back to JetBrains Mono. Operator Mono's weight classes run 275–400,
+  so 600 lands on its Bold face. A font change shows after switching layouts away
+  and back.
 - `ui_font: ".SystemUIFont"` and `".SF NS"` both reach San Francisco; `"SF Pro"` isn't
   a family on a stock Mac.
 - A menu's hover text color can't come from a theme: `.hover()` doesn't recolor

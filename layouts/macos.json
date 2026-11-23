@@ -191,9 +191,9 @@
     "chrome": "#00000000",
     "background": "#ffffff00"
   },
-  "font": "SF Mono",
-  "font_size": 13,
-  "font_weight": 400,
+  "font": "Operator Mono Italic Face",
+  "font_size": 14,
+  "font_weight": 600,
   "terminal_line_height": 1.1,
   "terminal_padding": [
     12,

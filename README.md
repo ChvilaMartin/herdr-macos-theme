@@ -2,7 +2,7 @@
 
 A light, native-looking macOS layout for [Herdr](https://herdr.dev): one frosted window
 over the blurred desktop, a Finder-style sidebar, white terminal cards, system-blue
-selections and rounded Tahoe-style menus, in San Francisco and SF Mono.
+selections and rounded Tahoe-style menus, in San Francisco with Operator Mono Italic terminals.
 
 Built on [Herdr Glass](https://github.com/noah4520/herdr-glass) by Noah Chen.
 
@@ -20,6 +20,16 @@ Or from a clone of this repo:
 ./scripts/install.sh              # copies into ~/.config/herdr-app and checks each mod
 herdr-app do layout.switch --name macos
 ```
+
+The terminals use Operator Mono Italic, a paid font this repo doesn't include. If you
+own Operator Mono, make the italic family Herdr can load (needs `pip install fonttools`):
+
+```sh
+python3 scripts/operator-mono-italic.py ~/Library/Fonts ~/.config/herdr-app/fonts
+```
+
+Without it, the terminals fall back to JetBrains Mono; or set the layout's `font` to
+any font you have.
 
 `cmd-shift-l` cycles layouts, so your previous one stays a key away. To remove it,
 delete `layouts/macos.*`, `themes/macos.json` and `mods/macos-*` from
@@ -40,7 +50,7 @@ delete `layouts/macos.*`, `themes/macos.json` and `mods/macos-*` from
 - **Appearance** (sidebar footer): glass level for the panes and side panel, and a
   background choice: Desktop (blurred desktop, the default) or a picture.
 
-It needs a Mac (window blur, SF fonts) and was built on herdr-app 0.1.16. Light only.
+It needs a Mac (window blur, SF fonts) and Operator Mono for the terminals and was built on herdr-app 0.1.16. Light only.
 
 ## Files
 
@@ -51,6 +61,7 @@ It needs a Mac (window blur, SF fonts) and was built on herdr-app 0.1.16. Light 
 | `mods/macos-*` | ten mods: sidebar, tabs, pane header, status, toast, menus, Appearance |
 | `RECIPE.md` | the brief to rebuild it from scratch (Herdr's sharing format) |
 | `scripts/install.sh` | copy into a Herdr home and check |
+| `scripts/operator-mono-italic.py` | make the italic terminal font from your Operator Mono |
 
 ## License
 
