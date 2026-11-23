@@ -38,7 +38,7 @@ through, blurred, under a light grey tint.
 - **Work column**:
   - Tab bar (42px): no card; tabs are pills (`raised` `#ffffffe0` for the active one),
     then `+`, Files and Changes buttons.
-  - Terminal panes: radius 16, fill `#ffffffbf`, border `#ffffff80`, a blue focus ring
+  - Terminal panes: radius 16, fill solid white `#ffffff`, border `#ffffff80`, a blue focus ring
     `#007aff8c` on the focused pane, a 30px header on every pane (`lone: true`),
     terminal text `[12, 14]` in. Terminal: SF Mono 13, weight 400, line height 1.1,
     `terminal_opacity: 0` (the rounded frame paints the white).
@@ -74,7 +74,8 @@ through, blurred, under a light grey tint.
 - **Appearance** (sidebar footer): Herdr Glass's dialog, adapted.
   - Glass: Clear / Light / Medium / Tinted / Solid sets the right panel's alpha
     (`40`/`66`/`99`/`c2`/`eb` on `#ffffff`) and the panes' (`bf`/`d9`/`e6`/`f0`/`fa`
-    on `#ffffff`). The sidebar, tab bar and status bar are never given a card.
+    on `#ffffff`); the layout ships with the panes solid white until a level is
+    picked. The sidebar, tab bar and status bar are never given a card.
   - Image: **Desktop** (the default: no picture, the window's `#f4f4f7a6` tint over
     the blurred desktop), Graphite, and every picture in
     `~/.config/herdr-app/backgrounds/` (Herdr Glass's presets are copied there the
